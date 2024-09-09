@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Form Inputs with React</title>
+    <style>
+      input {
+        width: 200px;
+        height: 20px;
+      }
+
+      button {
+        width: 100px;
+        height: 25px;
+        margin: 10px;
+        background-color: red;
+        color: white;
+        font-weight: 700;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function FormInput({ inputHobby, submitHobby, hobby }) {
+      return (
+        <div>
+          <input
+            onChange={inputHobby}
+            type="text"
+            placeholder="Enter your Hobby"
+            value={hobby}
+          />
+          <button onClick={submitHobby}>Submit</button>
+        </div>
+      );
+    }
+
+    function DisplayHobbies({ hobbies, deleteHobby }) {
+      return (
+        <ul>
+          {hobbies.map((ele, i) => (
+            <li>
+              {ele} <button onClick={() => deleteHobby(i)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    function App() {
+      const [hobbies, setHobbies] = React.useState([]);
+      const [hobby, setHobby] = React.useState("");
+
+      function inputHobby(e) {
+        setHobby(e.target.value);
+      }
+
+      function submitHobby(e) {
+        setHobbies([...hobbies, hobby]);
+        setHobby("");
+      }
+
+      function deleteHobby(index) {
+        const newHobbies = hobbies.filter((ele, i) => i !== index);
+        setHobbies(newHobbies);
+      }
+      return (
+        <>
+          <FormInput
+            inputHobby={inputHobby}
+            submitHobby={submitHobby}
+            hobby={hobby}
+          />
+          <DisplayHobbies hobbies={hobbies} deleteHobby={deleteHobby} />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</html>
